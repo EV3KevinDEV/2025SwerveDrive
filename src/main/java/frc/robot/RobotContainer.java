@@ -304,7 +304,7 @@ public class RobotContainer {
 
         //aux control the intake from the source
         //this is for getting the game pieces from the source
-        auxRightTrigger.onTrue(new RunCommand(() ->{//source intake
+        auxLeftTrigger.onTrue(new RunCommand(() ->{//source intake
 
 
                 // switch (arm.getStateE()) {

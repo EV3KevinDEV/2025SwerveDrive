@@ -44,10 +44,19 @@ public class IntakeWithDetectionCommand extends Command {
 
     @Override
     public boolean isFinished(){
+        System.out.println("distance Right: "+CANrangeERight.getDistance().getValue().in(Centimeters));
+        System.out.println("distance Left: "+CANrangeERight.getDistance().getValue().in(Centimeters));
         double distance = isSad 
-        ? CANrangeERight.getDistance().getValue().in(Centimeters) 
-        : CANrangeELeft.getDistance().getValue().in(Centimeters);
-        return distance <= 4;
+        ? CANrangeELeft.getDistance().getValue().in(Centimeters) 
+        : CANrangeERight.getDistance().getValue().in(Centimeters);//left is west
+
+        if(distance <= 14){
+            intake.stop();
+            return true;
+        }
+        else{
+            return false;
+        }
 
 
 

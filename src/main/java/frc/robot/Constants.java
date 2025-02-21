@@ -50,8 +50,8 @@ public final class Constants {
     public static final CANBus kIntakeCANbus = new CANBus("rio");
     public static final int kIntakeCurrentLimit = 40;
 
-    public static final int kCANrange1ID = 32;
-    public static final int kCANrange2ID = 33;
+    public static final int kCANrange1ID = 33;
+    public static final int kCANrange2ID = 32;
 
     //public static final int kCANrange2ID = ;
   }
@@ -84,8 +84,8 @@ public final class Constants {
 
     //random stuff
     public static final double test = 0.0;
-    public static final double kArmP = 0.03;
-    public static final double kArmI = 0;
+    public static final double kArmP = 0.04;
+    public static final double kArmI = 0.004;
     public static final double kArmD = 0;
 
     public static final double kMaxAngle = 225;

@@ -5,25 +5,24 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmSetPositionCommand extends Command {
     private final ArmSubsystem arm;
-    private final double targetPositionRotations;
+    private final double targetPositionAngles;
 
-    public ArmSetPositionCommand(ArmSubsystem arm, double targetPosition) {
+    public ArmSetPositionCommand(ArmSubsystem arm, double targetAngle) {
         this.arm = arm;
-        this.targetPositionRotations = targetPosition;
+        this.targetPositionAngles = targetAngle;
         addRequirements(arm);
     }
 
     @Override
     public void initialize() {
         System.out.println("Arm initialized");        
-        arm.setArmAngle(targetPositionRotations);
+        arm.setArmAngle(targetPositionAngles);
 
     }
 
     @Override
     public void execute(){
-        System.out.println("--------------------------Target"+targetPositionRotations);
-        System.out.println("---------------------------current"+arm.getArmAngle_Rotation());
+        System.out.println("--------------------------Target"+targetPositionAngles);
     }
 
     @Override
