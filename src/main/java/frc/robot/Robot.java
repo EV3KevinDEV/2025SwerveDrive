@@ -6,12 +6,22 @@ package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import org.photonvision.PhotonCamera;
+import org.photonvision.simulation.*;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -19,10 +29,47 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
 
   private final boolean kUseLimelight = false;
+  public static PhotonCameraSim cameraSim;
+  public static VisionSystemSim visionSim;
 
   public Robot() {
+
+    Translation3d robotToCameraTrl = new Translation3d(-0.276, -0.228, 0.238);
+    // and pitched 15 degrees up.
+    Rotation3d robotToCameraRot = new Rotation3d(0, Math.toRadians(-170), Math.toRadians(-35));
+
+
+    Transform3d robotToCamera = new Transform3d(robotToCameraTrl, robotToCameraRot);
+
+
+    visionSim = new VisionSystemSim("main");
+
+    AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+
+    visionSim.addAprilTags(tagLayout);
+
+    SimCameraProperties cameraProp = new SimCameraProperties();
+
+    // A 640 x 480 camera with a 100 degree diagonal FOV.
+    cameraProp.setCalibration(640, 480, Rotation2d.fromDegrees(100));
+    // Approximate detection noise with average and standard deviation error in pixels.
+    cameraProp.setCalibError(0.25, 0.08);
+    // Set the camera image capture framerate (Note: this is limited by robot loop rate).
+    cameraProp.setFPS(20);
+    // The average and standard deviation in milliseconds of image data latency.
+    cameraProp.setAvgLatencyMs(35);
+    cameraProp.setLatencyStdDevMs(5);
+
+    PhotonCamera camera = new PhotonCamera("cameraName");
+
+    PhotonCameraSim cameraSim = new PhotonCameraSim(camera, cameraProp);
+
+    visionSim.addCamera(cameraSim, robotToCamera);
+
     m_robotContainer = new RobotContainer();
-  }
+
+
+   }
 
   @Override
   public void robotPeriodic() {
@@ -117,5 +164,12 @@ public class Robot extends TimedRobot {
   public void testExit() {}
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    // var driveState = m_robotContainer.drivetrain.getState();
+
+    // visionSim.update(driveState.Pose);
+    // visionSim.getDebugField();
+
+
+  }
 }
